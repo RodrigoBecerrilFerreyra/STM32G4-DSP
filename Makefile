@@ -70,8 +70,11 @@ $(TARGET).bin: $(TARGET).elf
 	$(OC) -S -O binary $< $@
 	$(OS) $<
 
-.PHONY: clean
+.PHONY: clean flash
 clean:
 	rm -f $(OBJS)
 	rm -f $(TARGET).elf
 	rm -f $(TARGET).bin
+
+flash:
+	st-flash --reset write main.bin 0x08000000
