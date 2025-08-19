@@ -2,10 +2,10 @@
 TARGET = main
 
 # Define the linker script location and chip architecture.
-LD_SCRIPT = STM32G431KBTX_FLASH.ld
-STARTUP_FILE = startup_stm32g431kbtx.s
+LD_SCRIPT = STM32G474RETX_FLASH.ld
+STARTUP_FILE = startup_stm32g474xx.s
 MCU_SPEC  = cortex-m4
-CHIP_NUMBER = STM32G431xx
+CHIP_NUMBER = STM32G474xx
 # Find the Chip Number in inc/stm32g4xx.h lines 106-125
 
 # Toolchain definitions (ARM bare metal defaults)
