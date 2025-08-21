@@ -42,8 +42,10 @@ LSCRIPT = ./$(LD_SCRIPT)
 LFLAGS += -mcpu=$(MCU_SPEC)
 LFLAGS += -mthumb
 LFLAGS += -Wall
-LFLAGS += --specs=nosys.specs
-LFLAGS += -nostdlib
+LFLAGS += -lc
+LFLAGS += -lm
+LFLAGS += -lnosys
+LFLAGS += -specs=nano.specs
 LFLAGS += -lgcc
 LFLAGS += -T$(LSCRIPT)
 
@@ -51,6 +53,7 @@ INCLUDE = ./inc/
 
 AS_SRC   = $(STARTUP_FILE)
 C_SRC    = ./src/main.c
+C_SRC   += ./src/system_stm32g4xx.c
 
 OBJS += $(AS_SRC:.s=.o)
 OBJS += $(C_SRC:.c=.o)
