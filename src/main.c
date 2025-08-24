@@ -54,17 +54,8 @@ int main(void)
     while(1)
     {
 
-        GPIOA->ODR &= ~GPIO_ODR_OD5;
-        // while(!(TIM2->SR & 0x01));
-        while(!flag); flag = 0;
-        // TIM2->SR &= ~0x01; // clear ready flag
-
-        GPIOA->ODR |= GPIO_ODR_OD5;
-        // while(!(TIM2->SR & 0x01));
-        while(!flag); flag = 0;
-        // TIM2->SR &= ~0x01; // clear ready flag
-
-
+        GPIOA->ODR ^= GPIO_ODR_OD5;
+        __WFI();
 
     }
 
