@@ -1,6 +1,8 @@
 #include <stdint.h>
 #include "stm32g4xx.h"
 
+volatile int flag = 0;
+
 void init_GPIOA(void)
 {
     RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN; // enable GPIO Port A clock
@@ -10,9 +12,28 @@ void init_GPIOA(void)
 void init_timer2(void)
 {
     RCC->APB1ENR1 |= RCC_APB1ENR1_TIM2EN; // enable clock for TIM2
-    TIM2->SR &= ~TIM_SR_UIF; // clear ready flag
-    TIM2->ARR = 15999999; // at 16 MHz this should trigger once per second
+    TIM2->SR &= ~TIM_SR_UIF;              // clear ready flag
+    TIM2->ARR = 16000000 - 1;             // one second @ 16 MHz
+
+    NVIC_SetPriority(TIM2_IRQn, 0); // set priority level to 0 (top priority)
+    NVIC_EnableIRQ(TIM2_IRQn);      // enable interrupt
+    TIM2->DIER |= TIM_DIER_UIE;     // enable interrupt
+
     TIM2->CR1 |= TIM_CR1_CEN; // enable timer 2
+}
+
+/*
+void init_DAC2(void)
+{
+    RCC->AHB2ENR |= RCC_AHB2ENR_DAC2EN; // enable DAC2 clock
+    RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN; // enable GPIO Port A clock (DAC2 is on PA6)
+}
+*/
+
+void TIM2_IRQHandler(void)
+{
+    TIM2->SR &= ~TIM_SR_UIF; // clear ready flag
+    flag = 1; // set flag for LED switching
 }
 
 int main(void)
@@ -32,13 +53,19 @@ int main(void)
 
     while(1)
     {
+
         GPIOA->ODR &= ~GPIO_ODR_OD5;
-        while(!(TIM2->SR & 0x01));
-        TIM2->SR &= ~0x01; // clear ready flag
+        // while(!(TIM2->SR & 0x01));
+        while(!flag); flag = 0;
+        // TIM2->SR &= ~0x01; // clear ready flag
 
         GPIOA->ODR |= GPIO_ODR_OD5;
-        while(!(TIM2->SR & 0x01));
-        TIM2->SR &= ~0x01; // clear ready flag
+        // while(!(TIM2->SR & 0x01));
+        while(!flag); flag = 0;
+        // TIM2->SR &= ~0x01; // clear ready flag
+
+
+
     }
 
     return 0;
