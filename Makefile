@@ -16,7 +16,6 @@ LD = $(TOOLCHAIN)/bin/arm-none-eabi-ld
 OC = $(TOOLCHAIN)/bin/arm-none-eabi-objcopy
 OD = $(TOOLCHAIN)/bin/arm-none-eabi-objdump
 OS = $(TOOLCHAIN)/bin/arm-none-eabi-size
-MD5= md5sum
 
 # Assembly directives.
 ASFLAGS += -c
@@ -73,7 +72,6 @@ $(TARGET).elf: $(OBJS)
 $(TARGET).bin: $(TARGET).elf
 	$(OC) -S -O binary $< $@
 	$(OS) $<
-	$(MD5) $(TARGET).bin $(TARGET).elf
 
 .PHONY: clean flash
 clean:
