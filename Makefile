@@ -23,29 +23,28 @@ ASFLAGS += -O0
 ASFLAGS += -mcpu=$(MCU_SPEC)
 ASFLAGS += -mthumb
 ASFLAGS += -Wall
-# (Set error messages to appear on a single line.)
-ASFLAGS += -fmessage-length=0
 
 # C compilation directives
 CFLAGS += -mcpu=$(MCU_SPEC)
 CFLAGS += -mthumb
 CFLAGS += -Wall
 CFLAGS += -g
-# (Set error messages to appear on a single line.)
-CFLAGS += -fmessage-length=0
-# (Set system to ignore semihosted junk)
-CFLAGS += --specs=nosys.specs
+CFLAGS += -specs=nano.specs
+CFLAGS += -mfpu=fpv4-sp-d16
+CFLAGS += -mfloat-abi=hard
 
 # Linker directives.
 LSCRIPT = ./$(LD_SCRIPT)
 LFLAGS += -mcpu=$(MCU_SPEC)
 LFLAGS += -mthumb
 LFLAGS += -Wall
-LFLAGS += -lc
-LFLAGS += -lm
-LFLAGS += -lnosys
 LFLAGS += -specs=nano.specs
+LFLAGS += -specs=nosys.specs
+LFLAGS += -lnosys
+LFLAGS += -lc
 LFLAGS += -lgcc
+LFLAGS += -mfpu=fpv4-sp-d16
+LFLAGS += -mfloat-abi=hard
 LFLAGS += -T$(LSCRIPT)
 
 INCLUDE = ./inc/
